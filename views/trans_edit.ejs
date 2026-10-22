@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Transaction | Expense Tracker</title>
+  <link rel="stylesheet" href="/css/trans_edit.css">
+</head>
+
+<body>
+  <main class="transaction-page">
+
+    <div class="transaction-header">
+
+      <div>
+        <p class="brand-name">Expense Tracker</p>
+
+        <h1>Edit Transaction</h1>
+
+        <p class="subtitle">
+          Update the details of your transaction.
+        </p>
+      </div>
+
+      <a href="/logout" class="logout-btn">
+        Logout
+      </a>
+
+    </div>
+
+
+    <div class="transaction-card">
+
+      <% if (typeof warning !== "undefined" && warning) { %>
+        <div class="warning-message">
+          <%= warning %>
+        </div>
+      <% } %>
+
+      <form
+        action="/transactions/update/<%= trans.id %>"
+        method="POST"
+        class="transaction-form"
+      >
+
+        <% if (typeof warning !== "undefined" && warning) { %>
+          <input type="hidden" name="confirmUnplanned" value="1" />
+        <% } %>
+
+        <div class="form-group">
+
+          <label for="title">Title</label>
+
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="<%= trans.title %>"
+            placeholder="Enter title"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="amount">Amount</label>
+
+          <div class="amount-input">
+
+            <span>₹</span>
+
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              value="<%= trans.amount %>"
+              placeholder="0.00"
+              min="0.01"
+              step="0.01"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="category">Category</label>
+
+          <input
+            type="text"
+            id="category"
+            name="category"
+            value="<%= trans.category %>"
+            placeholder="e.g. Food, Salary, Shopping"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="date">Date</label>
+
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value="<%= trans.date instanceof Date ? trans.date.toISOString().split('T')[0] : trans.date %>"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="type">Transaction Type</label>
+
+          <select id="type" name="type" required>
+
+            <option
+              value="expense"
+              <%= trans.type === "expense" ? "selected" : "" %>
+            >
+              Expense
+            </option>
+
+            <option
+              value="income"
+              <%= trans.type === "income" ? "selected" : "" %>
+            >
+              Income
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <button class="submit-btn" type="submit">
+          <%= typeof warning !== "undefined" && warning ? "Update Anyway" : "Update Transaction" %>
+        </button>
+
+      </form>
+
+    </div>
+
+  </main>
+</body>
+
+</html>

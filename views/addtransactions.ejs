@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Transaction | Expense Tracker</title>
+
+    <link rel="stylesheet" href="/css/addtransaction.css" />
+  </head>
+
+  <body>
+    <main class="transaction-page">
+      <div class="transaction-header">
+        <div>
+          <p class="brand-name">Expense Tracker</p>
+          <h1>Add Transaction</h1>
+          <p class="subtitle">Record your income or expense.</p>
+        </div>
+
+        <a href="/logout" class="logout-btn">Logout</a>
+      </div>
+
+      <div class="transaction-card">
+
+        <% if (warning) { %>
+          <div class="warning-message">
+            <%= warning %>
+          </div>
+        <% } %>
+
+        <form action="/transactions" method="POST" class="transaction-form">
+
+          <input
+            type="hidden"
+            name="warningShown"
+            value="<%= warningShown %>"
+          />
+
+          <div class="form-group">
+            <label for="title">Title</label>
+
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="e.g. Grocery shopping"
+              value="<%= formData?.title || '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Amount</label>
+
+            <div class="amount-input">
+              <span>₹</span>
+
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="0.00"
+                min="0.01"
+                step="0.01"
+                value="<%= formData?.amount || '' %>"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+
+            <input
+              type="text"
+              id="category"
+              name="category"
+              placeholder="e.g. Food, Salary, Shopping"
+              value="<%= formData?.category || '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="date">Date</label>
+
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value="<%= formData?.date || '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Transaction Type</label>
+
+            <select id="type" name="type" required>
+              <option
+                value="expense"
+                <%= formData?.type === "expense" ? "selected" : "" %>
+              >
+                Expense
+              </option>
+
+              <option
+                value="income"
+                <%= formData?.type === "income" ? "selected" : "" %>
+              >
+                Income
+              </option>
+            </select>
+          </div>
+
+          <% if (warning) { %>
+            <button class="submit-btn" type="submit">
+              Add Anyway
+            </button>
+          <% } else { %>
+            <button class="submit-btn" type="submit">
+              + Add Transaction
+            </button>
+          <% } %>
+
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

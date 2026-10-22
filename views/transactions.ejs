@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions | Expense Tracker</title>
+    <link rel="stylesheet" href="/css/transactions.css">
+</head>
+<body>
+   <header class="dashboard-header">
+
+
+<div class="header-top">
+
+    <div>
+        <p class="welcome-text">Welcome back,</p>
+        <h1><%= name %> 👋</h1>
+    </div>
+
+    <div class="header-actions">
+       <a href="/addtransaction">Add Transaction</a>
+<a href="/monthly-plan">Monthly Plan</a>
+<a href="/logout">Logout</a>
+    </div>
+
+</div>
+
+<div class="page-title">
+    <h2>Transactions</h2>
+    <p>Track and manage your income and expenses</p>
+</div>
+
+<div class="filters">
+
+    <select
+        id="transactionFilter"
+        onchange="filterTransactions()"
+    >
+        <option value="all">All Transactions</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+    </select>
+
+    <form action="/month" method="get">
+
+        <input
+            type="month"
+            name="month"
+            value="<%= month || '' %>"
+        >
+
+        <button type="submit">View Month</button>
+
+        <a href="/transactions" class="all-time-btn">
+            All Time
+        </a>
+        <a href="#" class="current-month-btn" onclick="showCurrentMonth(event)">
+    Current Month
+</a>
+
+    </form>
+
+</div>
+
+
+</header>
+
+
+
+
+
+<div class="category-container">
+
+
+<!-- Income -->
+
+<div class="category-card income-category">
+
+    <div class="category-header">
+        <h2>Income</h2>
+        <span>Money received</span>
+    </div>
+
+    <div class="category-list">
+
+        <% incomeCat.forEach(transaction => { %>
+
+            <div class="category-row">
+
+                <span>
+                    <%= transaction.category %>
+                </span>
+
+                <strong>
+                    ₹ <%= Number(transaction.total).toFixed(2) %>
+                </strong>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+    <div class="category-total">
+        <span>Total Income</span>
+        <strong>
+            ₹ <%= Number(summary.totalIncome) || 0 %>
+        </strong>
+    </div>
+
+</div>
+
+
+<!-- Expenses -->
+
+<div class="category-card expense-category">
+
+    <div class="category-header">
+        <h2>Expenses</h2>
+        <span>Money spent</span>
+    </div>
+
+    <div class="category-list">
+
+        <% expenseCat.forEach(category => { %>
+
+            <div class="category-row">
+
+                <span>
+                    <%= category.category %>
+                </span>
+
+                <strong>
+                    ₹ <%= Number(category.total).toFixed(2) %>
+                </strong>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+    <div class="category-total">
+        <span>Total Expense</span>
+        <strong>
+            ₹ <%= Number(summary.totalExpense) || 0 %>
+        </strong>
+    </div>
+
+</div>
+
+
+</div>
+
+
+<button id="myButton" onclick="toggleButton()">
+    Show Summary
+</button>
+
+<div id="summarySection" style="display: none;">
+
+    <h2>Summary</h2>
+
+    <div class="summary-container">
+
+        <div class="summary-card income-card">
+            <h3>Total Income</h3>
+            <p>₹ <%= Number(summary.totalIncome) || 0 %></p>
+        </div>
+
+        <div class="summary-card expense-card">
+            <h3>Total Expense</h3>
+            <p>₹ <%= Number(summary.totalExpense) || 0 %></p>
+        </div>
+
+        <div class="summary-card balance-card">
+            <h3>Left Amount</h3>
+            <p>₹ <%= (Number(summary.totalIncome) || 0) - (Number(summary.totalExpense) || 0) %></p>
+        </div>
+
+        <div class="summary-card transaction-card">
+            <h3>Total Transactions</h3>
+            <p><%= summary.totalTransactions || 0 %></p>
+        </div>
+
+    </div>
+
+</div>
+<div class="table-container">
+<table class="transactions-table">
+
+
+<thead>
+    <tr>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+
+<tbody>
+     <% if (trans.length === 0) { %>
+
+        <tr>
+            <td colspan="6" class="empty-state">
+                <div>
+                    <h3>No transactions found</h3>
+                    <p>
+                        There are no transactions to display.
+                    </p>
+                    <a href="/addtransaction" class="add-btn">
+                        + Add Transaction
+                    </a>
+                </div>
+            </td>
+        </tr>
+
+    <% }
+else { %>
+    <% trans.forEach(transaction => { %>
+
+        <tr
+            class="transactionRow"
+            data-type="<%= transaction.type %>"
+        >
+
+            <td>
+                <%= transaction.title %>
+            </td>
+
+            <td class="amount <%= transaction.type %>">
+    <%= transaction.type === "income" ? "+" : "-" %>
+    ₹ <%= Number(transaction.amount).toFixed(2) %>
+</td>
+
+            <td>
+                <span class="transaction-type <%= transaction.type %>">
+                    <%= transaction.type %>
+                </span>
+            </td>
+
+            <td>
+                <%= transaction.category %>
+            </td>
+
+            <td>
+    <%= new Date(transaction.date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    }) %>
+</td>
+
+            <td class="actions">
+
+                <a
+                    href="/transactions/edit/<%= transaction.id %>"
+                    class="edit-btn"
+                >
+                    Edit
+                </a>
+
+                <form
+                    action="/transactions/delete/<%= transaction.id %>"
+                    method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this transaction?');"
+                >
+                    <button type="submit" class="delete-btn">
+                        Delete
+                    </button>
+                </form>
+
+            </td>
+
+        </tr>
+
+    <% }) %>
+      <% } %>
+
+</tbody>
+
+
+</table>
+</div>
+<script>
+
+    function filterTransactions() {
+
+        const filter =
+            document.getElementById("transactionFilter").value;
+
+        const rows =
+            document.querySelectorAll(".transactionRow");
+
+        rows.forEach(row => {
+
+            const type = row.dataset.type;
+
+            if (filter === "all" || filter === type) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    }
+
+
+    function toggleButton() {
+
+        const summary =
+            document.getElementById("summarySection");
+
+        const btn =
+            document.getElementById("myButton");
+
+        if (summary.style.display === "none") {
+
+            summary.style.display = "block";
+            btn.innerText = "Hide Summary";
+
+        } else {
+
+            summary.style.display = "none";
+            btn.innerText = "Show Summary";
+
+        }
+
+    }
+
+    function showCurrentMonth(event) {
+    event.preventDefault();
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    window.location.href = `/month?month=${year}-${month}`;
+}
+
+</script>
+
+</body>
+</html>
+

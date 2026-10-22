@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Register | Expense Tracker</title>
+
+    <link rel="stylesheet" href="/css/register.css" />
+  </head>
+
+  <body>
+    <main class="register-page">
+      <div class="register-card">
+        <div class="brand">
+          <h1>Expense Tracker</h1>
+          <p>Start managing your money smarter.</p>
+        </div>
+
+        <div class="register-heading">
+          <h2>Create your account</h2>
+          <p>Enter your details to get started</p>
+        </div>
+
+        <% if (typeof error !== "undefined" && error) { %>
+          <div class="warning-message">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <form action="/register" method="post" class="register-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Create a password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="register-btn">Create Account</button>
+        </form>
+
+        <div class="login-link">
+          <p>
+            Already have an account?
+            <a href="/login">Login</a>
+          </p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

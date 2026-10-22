@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Monthly Plan - Expense Tracker</title>
+
+    <link rel="stylesheet" href="/css/monthly-plan.css" />
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Header -->
+
+      <header class="page-header">
+        <div>
+          <h1>Monthly Financial Plan</h1>
+          <p>Plan your expenses and savings for the month.</p>
+        </div>
+
+        <nav>
+          <a href="/transactions">Transactions</a>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+
+      <!-- Select Month -->
+
+      <div class="card">
+        <h2>View Monthly Plan</h2>
+
+        <form action="/monthly-plan" method="GET">
+
+          <label for="month">Select Month</label>
+
+          <input
+            type="month"
+            id="month"
+            name="month"
+            value="<%= selectedMonth %>"
+            required
+          />
+
+          <button type="submit" class="primary-btn">
+            View Plan
+          </button>
+
+        </form>
+      </div>
+
+
+      <!-- Create / Update Plan -->
+
+      <div class="card">
+
+        <h2>
+          <%= values ? "Update Monthly Plan" : "Create Monthly Plan" %>
+        </h2>
+
+        <form action="/monthly-plan" method="POST">
+
+          <label for="plan-month">Month</label>
+
+          <input
+            type="month"
+            id="plan-month"
+            name="month"
+            value="<%= selectedMonth %>"
+            required
+          />
+
+
+          <label for="savings_goal">Monthly Savings Goal</label>
+
+          <input
+            type="number"
+            id="savings_goal"
+            name="savings_goal"
+            min="0"
+            step="0.01"
+            placeholder="Enter savings goal"
+            value="<%= values ? Number(values.savings_goal) : "" %>"
+            required
+          />
+
+
+          <h3>Mandatory Expenses</h3>
+
+          <div id="expenses">
+
+            <div class="expense-row">
+
+              <input
+                type="text"
+                name="category"
+                placeholder="Expense category"
+                required
+              />
+
+              <input
+                type="number"
+                name="amount"
+                placeholder="Amount"
+                min="0"
+                step="0.01"
+                required
+              />
+
+            </div>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="secondary-btn"
+            onclick="addExpense()"
+          >
+            + Add Expense
+          </button>
+
+
+          <button
+            type="submit"
+            class="primary-btn save-btn"
+          >
+            <%= values ? "Update Monthly Plan" : "Save Monthly Plan" %>
+          </button>
+
+        </form>
+
+      </div>
+
+
+      <!-- Existing Plan -->
+
+      <% if (values) { %>
+
+        <div class="card">
+
+          <h2>Your Monthly Plan</h2>
+
+          <div class="plan-summary">
+
+            <div class="summary-item">
+              <span>Month</span>
+              <strong><%= selectedMonth %></strong>
+            </div>
+
+            <div class="summary-item">
+              <span>Savings Goal</span>
+              <strong>
+                ₹ <%= Number(values.savings_goal).toFixed(2) %>
+              </strong>
+            </div>
+
+          </div>
+
+
+          <h3>Mandatory Expenses</h3>
+
+          <% if (expenses.length > 0) { %>
+
+            <div class="expense-list">
+
+              <% expenses.forEach(expense => { %>
+
+                <div class="expense-item">
+
+                  <span>
+                    <%= expense.category %>
+                  </span>
+
+                  <strong>
+                    ₹ <%= Number(expense.amount).toFixed(2) %>
+                  </strong>
+
+                </div>
+
+              <% }) %>
+              <h2>Total Mandatory Expense <%= MontlyMandatoryExpens %></h2>
+              <h2>Total Monthly Income <%=income%></h2>
+            <h2>Saving Goal <%=saving%></h2>
+                <h1>
+  <strong>Available Money:</strong>
+  ₹ <%= availablemoney %>
+                </h1>
+
+            </div>
+
+          <% } else { %>
+
+            <p class="empty-message">
+              No mandatory expenses have been added for this month.
+            </p>
+
+          <% } %>
+
+        </div>
+
+      <% } else { %>
+
+        <div class="card empty-card">
+
+          <h2>No Plan Found</h2>
+
+          <p>
+            You haven't created a monthly plan for
+            <strong><%= selectedMonth %></strong> yet.
+          </p>
+
+        </div>
+
+      <% } %>
+
+    </div>
+
+
+    <script>
+      function addExpense() {
+        const expenses = document.getElementById("expenses");
+
+        const row = document.createElement("div");
+
+        row.className = "expense-row";
+
+        row.innerHTML = `
+          <input
+            type="text"
+            name="category"
+            placeholder="Expense category"
+            required
+          />
+
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            min="0"
+            step="0.01"
+            required
+          />
+        `;
+
+        expenses.appendChild(row);
+      }
+    </script>
+
+  </body>
+</html>

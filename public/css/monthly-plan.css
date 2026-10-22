@@ -1,0 +1,131 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #222;
+  padding: 30px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.top-links {
+  margin-bottom: 30px;
+}
+
+.top-links a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.expense-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.expense-row input {
+  margin-bottom: 0;
+}
+
+.expense-row input:first-child {
+  flex: 2;
+}
+
+.expense-row input:last-child {
+  flex: 1;
+}
+
+button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.add-expense {
+  background: #e5e7eb;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background: #2563eb;
+  color: white;
+  margin-top: 20px;
+}
+
+.plan-info {
+  line-height: 1.8;
+}
+
+.expense-list {
+  margin-top: 15px;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.amount {
+  font-weight: bold;
+}
+
+.no-plan {
+  color: #666;
+  line-height: 1.6;
+}
+
+.selected-month {
+  font-weight: bold;
+}
