@@ -16,6 +16,9 @@ const err = require("./middleware/errorhandling");
 
 const app = express();
 
+// Trust reverse proxy (required for Render / cloud deployments to handle HTTPS session cookies)
+app.set("trust proxy", 1);
+
 if (!process.env.SESSION_SECRET) {
   console.warn(
     "Warning: SESSION_SECRET is not set. Set it in your .env file before deploying.",
@@ -32,6 +35,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   }),
